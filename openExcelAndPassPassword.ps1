@@ -1,10 +1,14 @@
-# PowerShell script to open a Microsoft Excel Workbook 
-# that is protected by a password passing the password directly.
-# Use:
-#   openExcelAndPassPassword -path <excel_filename> -password <password>
-#
-# 2024-03-20 - ahellingil - Draft 1.0
-#
+<# 
+.DESCRIPTION
+ PowerShell script to open a Microsoft Excel Workbook 
+ that is protected by a password passing the password directly.
+
+.SYNOPSIS
+   ./openExcelAndPassPassword.ps1 -path <excel_filename> -password <password>
+
+.NOTES
+ Author: ahellingil
+#>
 param(
     [string]$path,
     [int]$password
