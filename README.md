@@ -8,3 +8,4 @@ This is my personal code snippets for the powershell scripts I usually use.
 | [openExcelAndPassPassword.ps1](openExcelAndPassPassword.ps1) | Open a Microsoft Excel Workbook that is protected by a password passing the password directly.                                 |
 | [searchInRegistry.ps1](searchInRegistry.ps1) | List all the ocurrences of a pattern in the Windows Registry. |
 | [listFilesRecursively.ps1](listFilesRecursively.ps1) | List all files recursively with the full path included. |
+| [checkUserAccessToServer.ps1](checkUserAccessToServer.ps1) | checkUserAccessToServer.ps1 check what folders/subfolders a user has access in a server or PC. |
