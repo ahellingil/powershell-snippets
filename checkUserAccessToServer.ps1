@@ -30,14 +30,42 @@ param (
     [string]$Path
 )
 
+# Validate parameters
+if (-not $User) {
+    Write-Error "The -User parameter is required."
+    exit
+}
 if (-not (Test-Path $Path)) {
-    Write-Error "La ruta especificada no existe: $Path"
+    Write-Error "The specified path does not exist: $Path"
     exit
 }
 
+# Get user groups
+try {
+    $userGroups = ([System.Security.Principal.WindowsIdentity]::GetCurrent()).Groups | ForEach-Object {
+        $_.Translate([System.Security.Principal.NTAccount]).Value
+    }
+    $userGroups += $User
+} catch {
+    Write-Warning "Could not retrieve the user's groups. Only the specified name will be used."
+    $userGroups = @($User)
+}
+
+
+# Define access rights that imply actual access
+$validRights = @(
+    "ReadData", "ListDirectory", "Read", "ReadAndExecute",
+    "Modify", "Write", "FullControl"
+)
+
+# Check access for each folder and subfolder
 Get-ChildItem -Path $Path -Recurse -Directory | ForEach-Object {
     $acl = Get-Acl $_.FullName
-    if ($acl.Access | Where-Object { $_.IdentityReference -like "*$User*" }) {
-        Write-Output "$($_.FullName) - acceso para $User"
+    $accessmatches = $acl.Access | Where-Object {
+        ($userGroups -contains $_.IdentityReference.Value) -and
+        ($validRights -contains $_.FileSystemRights.ToString())
+    }
+    if ($accessmatches) {
+        Write-Output "$($_.FullName)"
     }
 }
